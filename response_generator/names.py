@@ -204,3 +204,19 @@ LAST = [
 "Hayes",
 ]
 
+SCOPE_TEAMS = [
+        "New Balance Press",
+        "New Balance Stitch",
+        "Accelerate Wind",
+        "Blue Origin",
+        "BU Wise",
+        "Linevision",
+        "Santos Volpe",
+        "Microsoft NERD",
+        "Mass EEC",
+        "Moderna",
+        "Pfizer",
+        "Amazon Robotics",
+        "Boston Scientific",
+]
+

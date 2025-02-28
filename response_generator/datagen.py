@@ -1,22 +1,6 @@
-from names import FIRST, LAST
+from names import FIRST, LAST, SCOPE_TEAMS
 from random import choice, randint
 import pandas as pd
-
-SCOPE_TEAMS = [
-        "New Balance Press",
-        "New Balance Stitch",
-        "Accelerate Wind",
-        "Blue Origin",
-        "BU Wise",
-        "Linevision",
-        "Santos Volpe",
-        "Microsoft NERD",
-        "Mass EEC",
-        "Moderna",
-        "Pfizer",
-        "Amazon Robotics",
-        "Boston Scientific",
-]
 
 RESPONSES = 65
 
