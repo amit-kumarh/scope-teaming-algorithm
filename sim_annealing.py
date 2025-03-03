@@ -6,19 +6,32 @@ from response_generator.names import SCOPE_TEAMS
 class Solution:
     def __init__(self, responses, teams=None):
         self.responses = responses
-        if teams is not None:
-            self.teams = teams
-        else:
-            self.teams = self.gen_random_teams()
+        self.teams = teams if teams is not None else self.gen_random_teams()
 
     def total_rating(self):
+        """
+        Total the project ratings for this solution
+        """
         ans = 0
         for student, team in self.teams.items():
             ans += self.responses.loc[self.responses["Name"] == student][team].values[0]
         return ans
 
+    def antiprefs_violated(self):
+        """
+        Return the number of silver bullet violations in this solution
+        """
+        ret = 0
+        for student, team in self.teams.items():
+            antiprefs = self.responses.loc[self.responses["Name"] == student]["Antipreferences"].values[0]
+            for a in antiprefs:
+                if self.teams[a] == team:
+                    ret += 1
+        return ret
+
+
     def heuristic(self):
-        return self.total_rating()
+        return self.total_rating() - 100 * self.antiprefs_violated()
 
     def swap_two(self, s1, s2):
         self.teams[s1], self.teams[s2] = self.teams[s2], self.teams[s1]
@@ -40,15 +53,17 @@ class Solution:
 
 
 def boltzmann(delta, k, T):
+    # TODO: overflow warning here
+    print(delta, k, T)
     return np.exp(-delta / (k * T))
 
-def anneal(curr_solution, T0, alpha):
+def anneal(curr_solution, T0, alpha, thresh):
     T = T0
 
     best_solution = curr_solution
     best_heuristic = 0
 
-    while T > 0.001:
+    while T > thresh:
         s1 = random.choice(list(curr_solution.teams.keys()))
         s2 = random.choice(list(curr_solution.teams.keys()))
         delta = (ch := curr_solution.swapped_heuristic(s1, s2)) - curr_solution.heuristic()
@@ -57,8 +72,8 @@ def anneal(curr_solution, T0, alpha):
             if ch > best_heuristic:
                 best_solution = curr_solution
                 best_heuristic = ch
+                print(best_heuristic)
         
-        print(curr_solution.heuristic())
         T *= alpha
     
     return best_solution, best_heuristic
@@ -67,10 +82,12 @@ def anneal(curr_solution, T0, alpha):
 def main():
     T0 = 1
     alpha = 0.99
+    thresh = 0.001
 
-    responses = pd.read_csv('responses.csv')
+    responses = pd.read_json('responses.json')
+    print(responses.head(10))
     initial = Solution(responses)
-    print('best:', anneal(initial, T0, alpha)[1])
+    print('best:', anneal(initial, T0, alpha, thresh)[1])
     
 
 if __name__ == '__main__':
