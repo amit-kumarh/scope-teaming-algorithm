@@ -1,7 +1,35 @@
 import pandas as pd
 import numpy as np
 import random
+from matplotlib import pyplot as plt
+
+
 from response_generator.names import SCOPE_TEAMS
+
+import argparse
+
+def parse_arguments():
+    """
+    Parses command-line arguments for a local search teaming algorithm.
+    """
+    parser = argparse.ArgumentParser(description="Local Search Teaming Algorithm")
+    subparsers = parser.add_subparsers(dest="mode", help="Choose between single run or parameter sweep")
+
+    # Single run mode
+    single_run_parser = subparsers.add_parser("single", help="Run the algorithm with specific parameters")
+    single_run_parser.add_argument("--alpha", type=float, help="Alpha parameter", required=True)
+    single_run_parser.add_argument("--threshold", type=float, help="Threshold parameter", required=True)
+
+    # Parameter sweep mode
+    sweep_parser = subparsers.add_parser("sweep", help="Run the algorithm with a range of parameters")
+    sweep_parser.add_argument("--alpha_start", type=float, help="Start value for alpha sweep")
+    sweep_parser.add_argument("--alpha_end", type=float, help="End value for alpha sweep")
+    sweep_parser.add_argument("--alpha_step", type=float, help="Step size for alpha sweep")
+
+    # Optional arguments, common to both modes.
+    parser.add_argument("--seed", type=int, help="Random seed for reproducibility")
+
+    return parser.parse_args()
 
 class Solution:
     def __init__(self, responses, teams=None):
@@ -50,8 +78,6 @@ class Solution:
         # print(teams)
         return teams
     
-
-
 def boltzmann(delta, T):
     k = 1e-23
     return np.exp(delta / (k * T))
@@ -71,23 +97,41 @@ def anneal(curr_solution, T0, alpha, thresh):
             if ch > best_heuristic:
                 best_solution = curr_solution
                 best_heuristic = ch
-                print(best_heuristic)
         
         T *= alpha
-    
     return best_solution, best_heuristic
 
 
 def main():
     T0 = 1
-    alpha = 0.99
-    thresh = 0.001
+    THRESHOLD = 0.001
+    args = parse_arguments()
 
     responses = pd.read_json('responses.json')
-    print(responses.head(10))
-    initial = Solution(responses)
-    print('best:', anneal(initial, T0, alpha, thresh)[1])
-    
+
+    if args.mode == "single":
+        random.seed(args.seed)
+        np.random.seed(args.seed)
+        solution = Solution(responses)
+        _best_solution, best_heuristic = anneal(solution, T0, args.alpha, THRESHOLD)
+        print(best_heuristic)
+    elif args.mode == "sweep":
+        # parameter sweep alpha and plot results
+        alphas = np.arange(args.alpha_start, args.alpha_end, args.alpha_step)
+        results = []
+        for alpha in alphas:
+            random.seed(args.seed)
+            np.random.seed(args.seed)
+            solution = Solution(responses)
+            _best_solution, best_heuristic = anneal(solution, T0, alpha, THRESHOLD)
+            results.append(best_heuristic)
+            print(f"Alpha: {alpha}, Heuristic: {best_heuristic}")
+
+        plt.plot(alphas, results)
+        plt.xlabel("Alpha")
+        plt.ylabel("Best Heuristic")
+        plt.title("Alpha Sweep")
+        plt.show()
 
 if __name__ == '__main__':
     main()

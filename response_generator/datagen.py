@@ -33,8 +33,6 @@ def main():
     df = pd.DataFrame(data, columns=cols)
     df.to_json('responses.json')
 
-
-
 if __name__ == "__main__":
     main()
 
