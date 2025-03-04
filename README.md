@@ -28,10 +28,18 @@ There are ethical dilemmas when using algorithms like this to create student SCO
 
 Nevertheless, there are measures that can be taken to address these concerns (many of which are employed by the SCOPE teaching team!). Promoting transparency about the algorithm and the qualities it prioritizes can help reduce the "black box" feeling and increase students' sense of agency. Additionally, transparency into the factors the algorithm considers and prioritizes, and careful consideration of those factors, can help reduce algorithmic bias. Lastly, because there are factors that the algorithm simply cannot fully consider, adding human oversight and intervention is critical – an algorithm-assisted, but ultimately human, process as opposed to an entirely machine-driven one. 
 
-
 ## Libraries Used
 
+numpy
+pandas
+random
+matplotlib
+collections
+argparse
 
 ## Resources Used
 
+Lecture Slides
+[SCOPE Teaming Algorithm](https://github.com/AllenDowney/TeamAllocation)
+[Geeks For Geeks](https://www.geeksforgeeks.org/simulated-annealing/)
 
