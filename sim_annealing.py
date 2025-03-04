@@ -54,8 +54,7 @@ class Solution:
 
 def boltzmann(delta, k, T):
     # TODO: overflow warning here
-    print(delta, k, T)
-    return np.exp(-delta / (k * T))
+    return np.exp(delta / (k * T))
 
 def anneal(curr_solution, T0, alpha, thresh):
     T = T0
