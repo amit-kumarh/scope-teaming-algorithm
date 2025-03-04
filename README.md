@@ -8,7 +8,7 @@ Team Members: Amit Kumar-Hermosillo, Lily Jiang
 
 This implementation relies on Simulated Annealing, which is a metaheuristic inspired by annealing in metallurgy (a process that involves heating a metal to a high temperature and slowly cooling it down to remove defects in its crystal structure). The algorithm starts at a "high temperature", meaning it is more willing to accept a random solution that is worse than the current solution so it explores a wide range of solutions. As the algorithm "cools down", it becomes less willing to accept worse solutions, allowing it to converge to a solution. Because of this mechanic, this algorithm is better at handling complex, multi-peaked solution spaces than simpler algorithms like local searches, which easily get stuck in a local optima. Compared to other metaheuristics like genetic algorithms or ant colonies, simulated annealing is simpler to refine as it requires tweaking of only one or two parameters (the cooling rate and/or the threshold for when to stop iterating). However, despite all of it benefits, simulated annealing is not guaranteed to find the exact optimal solution and thus falls short when a precise solution is required.
 
-The main design decisions with simulated annealing stem from the parameter values. **Alpha**, the cooling rate, determines how quickly the algorithm will converge to a solution. A low alpha like 0.8 causes the algorithm to converge quickly, but is more likely to not find the optimal solution. A high alpha like 0.99 allows the algorithm to explore more of the solution space (due to its influence on the Boltzmann constant), but takes much longer to converge and uses more computing power. The **threshold** for stopping the algorithm is the other important parameter. A high threshold may cause the algorithm to not converge to a solution. A low threshold may cause the algorithm to take too long to converge.
+The main design decisions with simulated annealing stem from the parameter values. **Alpha**, the cooling rate, determines how quickly the algorithm will converge to a solution. A low alpha like 0.8 causes the algorithm to converge quickly, but is more likely to not find a more optimal solution. A high alpha like 0.99 allows the algorithm to explore more of the solution space (due to its influence on the Boltzmann function), but takes much longer to converge and uses more computing power. The **threshold** for stopping the algorithm is the other important parameter. A high threshold may cause the algorithm to not converge to a solution. A low threshold may cause the algorithm to take too long to converge.
 
 ### How it Works (Walkthrough)
 
@@ -37,7 +37,7 @@ We have adapted the simulated annealing algorithm to this problem as follows:
     - The first is the student project rating; each student rates each project on a scale from 1-5, and project "score" of a particular solution is simply the sum of each student's score for their assigned project
     - Any violated antipreferences subtract 100 from that solution's score. We chose this number because we wanted the penalty to be harsh, such that most of the time a violated antipreference is much worse than lower project enjoyment, but doesn't entirely disqualify them if they are the only viable option
     - As more constraints and elements were to be added to this teaming algorithm, the heuristic could be adjusted to include those.
-- Our neighbor relation is simply swapping two students around so they are on each other's teams.
+- Our neighbor relation is simply swapping two students around within the allocation.
 
 As far as simulated annealing-specific parameters, we've set:
 
@@ -57,16 +57,16 @@ Nevertheless, there are measures that can be taken to address these concerns (ma
 
 ## Libraries Used
 
-numpy
-pandas
-random
-matplotlib
-collections
-argparse
+- numpy
+- pandas
+- random
+- matplotlib
+- collections
+- argparse
 
 ## Resources Used
 
-Lecture Slides
-[SCOPE Teaming Algorithm](https://github.com/AllenDowney/TeamAllocation)
-[Geeks For Geeks](https://www.geeksforgeeks.org/simulated-annealing/)
+- Lecture Slides
+- [SCOPE Teaming Algorithm](https://github.com/AllenDowney/TeamAllocation)
+- [Geeks For Geeks](https://www.geeksforgeeks.org/simulated-annealing/)
 
