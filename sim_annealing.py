@@ -119,7 +119,7 @@ def main():
         print(best_heuristic)
     elif args.mode == "sweep":
         # parameter sweep alpha and plot results
-        alphas = np.arange(args.alpha_start, args.alpha_end, args.alpha_step)
+        alphas = np.arange(args.alpha_start, args.alpha_end+args.alpha_step, args.alpha_step)
         all_results = defaultdict(list)
 
         with open("alpha_sweep.csv", "w") as f:
