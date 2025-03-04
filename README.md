@@ -22,6 +22,26 @@ The main design decisions with simulated annealing stem from the parameter value
     * Are there key assumptions about the problem that must hold true in order to use this algorithm?
 * Other use cases of the algorithm
 
+We have chosen to adapt the simulated annealing algorithm to the problem of SCOPE team allocation at Olin - in other words, allocating a set of students into teams with various priorities and factors at play that aren't solvable at a glance in a most optimal fashion. This includes things like student wishlists for project, team antipreferences, required majors and skillsets, citizenship requirements, etc.
+
+We have adapted the simulated annealing algorithm to this problem as follows:
+- A single solution would be any allocation of the students onto teams (for this codebase, we are going with 65 students and 13 teams of 5 students each). This would make the solution space all of those possible allocations.
+- Our heuristic function at the moment incorporates two factors.
+    - The first is the student project rating; each student rates each project on a scale from 1-5, and project "score" of a particular solution is simply the sum of each student's score for their assigned project
+    - Any violated antipreferences subtract 100 from that solution's score. We chose this number because we wanted the penalty to be harsh, such that most of the time a violated antipreference is much worse than lower project enjoyment, but doesn't entirely disqualify them if they are the only viable option
+    - As more constraints and elements were to be added to this teaming algorithm, the heuristic could be adjusted to include those.
+- Our neighbor relation is simply swapping two students around so they are on each other's teams.
+
+As far as simulated annealing-specific parameters, we've set:
+
+- The initial system temperature to 1
+- The stop criteria as when the system temperature drops below 0.001
+- The cooling schedule as $T_{i+1} = T_i * \alpha$, and swept alpha from 0.8 to 0.99 to evaluate the trade-off between iterations (and therefore runtime) vs performance.
+
+In `//reponse_generation`, there's a quick script that generates survey reponses which are then used to test this algorithm in the remainder of our codebase.
+
+As far as other applications, simulated annealing is a very common local search variant, and is typically employed in difficult problems where it might be impossible to find a most optimal solution through brute force, including image processing and computer vision, circuit design/VLSI layout, and other kinds of resource allocation problems.
+
 ### Ethical Analysis (~1-2 Paragraphs)
 
 There are ethical dilemmas when using algorithms like this to create student SCOPE teams. For one, there are definite potential sources of bias, whether in the student responses or in the algorithm's heuristics, which might favor certain qualities that benefit some groups over others. There can also be a lack of transparency and privacy concerns regarding how student data is used, and students may feel a lack of agency or that insufficient care was put into their team selection. For instance, our algorithm has several random elements regarding how it traverses the solution space that could potentially have a major influence on the results.
