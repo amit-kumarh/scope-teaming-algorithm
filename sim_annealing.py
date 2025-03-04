@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import random
 from matplotlib import pyplot as plt
-
+from collections import defaultdict
 
 from response_generator.names import SCOPE_TEAMS
 
@@ -28,6 +28,7 @@ def parse_arguments():
 
     # Optional arguments, common to both modes.
     parser.add_argument("--seed", type=int, help="Random seed for reproducibility")
+    parser.add_argument("--iterations", type=int, help="Random seed for reproducibility")
 
     return parser.parse_args()
 
@@ -110,26 +111,40 @@ def main():
     responses = pd.read_json('responses.json')
 
     if args.mode == "single":
-        random.seed(args.seed)
-        np.random.seed(args.seed)
+        if args.seed is not None:
+            random.seed(args.seed)
+            np.random.seed(args.seed)
         solution = Solution(responses)
         _best_solution, best_heuristic = anneal(solution, T0, args.alpha, THRESHOLD)
         print(best_heuristic)
     elif args.mode == "sweep":
         # parameter sweep alpha and plot results
         alphas = np.arange(args.alpha_start, args.alpha_end, args.alpha_step)
-        results = []
-        for alpha in alphas:
-            random.seed(args.seed)
-            np.random.seed(args.seed)
-            solution = Solution(responses)
-            _best_solution, best_heuristic = anneal(solution, T0, alpha, THRESHOLD)
-            results.append(best_heuristic)
-            print(f"Alpha: {alpha}, Heuristic: {best_heuristic}")
+        all_results = defaultdict(list)
 
-        plt.plot(alphas, results)
+        with open("alpha_sweep.csv", "w") as f:
+            f.write("alpha,run,heuristic\n")
+
+        for alpha in alphas:
+            alpha = round(alpha, 2)
+            for _ in range(args.iterations):
+                if args.seed is not None:
+                    random.seed(args.seed)
+                    np.random.seed(args.seed)
+                solution = Solution(responses)
+                _best_solution, best_heuristic = anneal(solution, T0, alpha, THRESHOLD)
+                all_results[alpha].append(best_heuristic)
+                print(f"Alpha: {alpha}, Heuristic: {best_heuristic}")
+
+            # Write to CSV
+            with open("alpha_sweep.csv", "a") as f:
+                for run, heuristic in enumerate(all_results[alpha]):
+                    f.write(f"{alpha},{run},{heuristic}\n")
+
+        # Plot average best for funsies
+        plt.plot(alphas, [np.mean(all_results[alpha]) for alpha in alphas])
         plt.xlabel("Alpha")
-        plt.ylabel("Best Heuristic")
+        plt.ylabel("Average Best Heuristic")
         plt.title("Alpha Sweep")
         plt.show()
 
