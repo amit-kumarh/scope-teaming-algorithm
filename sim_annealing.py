@@ -52,8 +52,8 @@ class Solution:
     
 
 
-def boltzmann(delta, k, T):
-    # TODO: overflow warning here
+def boltzmann(delta, T):
+    k = 1e-23
     return np.exp(delta / (k * T))
 
 def anneal(curr_solution, T0, alpha, thresh):
@@ -66,7 +66,7 @@ def anneal(curr_solution, T0, alpha, thresh):
         s1 = random.choice(list(curr_solution.teams.keys()))
         s2 = random.choice(list(curr_solution.teams.keys()))
         delta = (ch := curr_solution.swapped_heuristic(s1, s2)) - curr_solution.heuristic()
-        if delta > 0 or np.random.rand() < boltzmann(delta, 1e-23, T):
+        if delta > 0 or np.random.rand() < boltzmann(delta, T):
             curr_solution.swap_two(s1, s2)
             if ch > best_heuristic:
                 best_solution = curr_solution
