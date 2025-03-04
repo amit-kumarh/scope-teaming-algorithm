@@ -11,16 +11,23 @@ This implementation relies on Simulated Annealing, which is a metaheuristic insp
 The main design decisions with simulated annealing stem from the parameter values. **Alpha**, the cooling rate, determines how quickly the algorithm will converge to a solution. A low alpha like 0.8 causes the algorithm to converge quickly, but is more likely to not find the optimal solution. A high alpha like 0.99 allows the algorithm to explore more of the solution space (due to its influence on the Boltzmann constant), but takes much longer to converge and uses more computing power. The **threshold** for stopping the algorithm is the other important parameter. A high threshold may cause the algorithm to not converge to a solution. A low threshold may cause the algorithm to take too long to converge.
 
 ### How it Works (Walkthrough)
-* How does it work? What components are in its design?
-* What are its operating principles? What is the intuition behind its operating principles?
-* Original figures/diagrams to aid explanation
+
+The simulated annealing algorithm works as follows:
+1. A completely random solution is generated, where every student is placed on a team with 5 students to a team. This is the initial solution.
+2. An initial temperature is set to 1.
+3. While the initial temperature is greater than a threshold (0.001), the algorithm will iterate and achieve the following each iteration:
+    a. Two random students are selected to swap teams, representing the neighbor relation.
+    b. The algorithm calculates the change in heuristic (the score of the solution) if the two students were to swap teams.
+    c. If the change in heuristic is positive, the swap is accepted.
+    d. If the change in heuristic is negative, the swap is accepted with a probability of $e^{\frac{\Delta H}{k * T}}$, where $\Delta H$ is the change in heuristic (new - old), k is a tiny constant number, and $T$ is the current temperature.
+    e. The temperature is then cooled by multiplying it by the cooling rate, alpha.
+    f. The best solution found so far is updated if the newly-found solution is better.
+4. Once the temperature is below the threshold, the algorithm stops and returns the best solution found.
+
+This follows the overall structure of annealing, where we start at a high temperature and cool down to a low temperature, allowing the algorithm to explore a wide range of solutions before converging to a solution.
+
 
 ### Solving a Problem (~1-2 paragraphs)
-* Choose an application that your algorithm can be applied to & explain it
-* Discuss how the algorithm would be applied/adapted to the problem as presented
-    * Are there alterations that need to be made to the algorithm to enable it to be applied to this problem?
-    * Are there key assumptions about the problem that must hold true in order to use this algorithm?
-* Other use cases of the algorithm
 
 We have chosen to adapt the simulated annealing algorithm to the problem of SCOPE team allocation at Olin - in other words, allocating a set of students into teams with various priorities and factors at play that aren't solvable at a glance in a most optimal fashion. This includes things like student wishlists for project, team antipreferences, required majors and skillsets, citizenship requirements, etc.
 
