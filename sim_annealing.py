@@ -142,7 +142,7 @@ def main():
                     f.write(f"{alpha},{run},{heuristic}\n")
 
         # Plot average best for funsies
-        plt.plot(alphas, [np.mean(all_results[alpha]) for alpha in alphas])
+        plt.plot(alphas, [np.mean(all_results[round(alpha, 2)]) for alpha in alphas])
         plt.xlabel("Alpha")
         plt.ylabel("Average Best Heuristic")
         plt.title("Alpha Sweep")
