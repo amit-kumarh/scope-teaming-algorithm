@@ -58,11 +58,14 @@ The simulated annealing algorithm works as follows:
 This follows the overall structure of annealing, where we start at a high
 temperature and cool down to a low temperature, allowing the algorithm to
 explore a wide range of solutions before converging to a solution. This
-randomized "jumping" can be seen in the following graphs repesenting different
-runs with the exact same threshold and cooling rates:
+randomized "jumping" can be seen in the following graphs showing the heuristic
+calculated at each jump and the overall best heuristic found for one run:
 
-<img src="media/anneal_with_visual1.jpg" alt="annealing process with visual (increasing only)" width="300"/>
 <img src="media/anneal_with_visual2.jpg" alt="annealing process with visual" width="300"/>
+<img src="media/anneal_with_visual1.jpg" alt="annealing process with visual (increasing only)" width="300"/>
+
+Note the large jumps at the beginning, and the smaller jumps as the algorithm
+progresses.
 
 ### Solving a Problem (~1-2 paragraphs)
 
