@@ -32,6 +32,7 @@ def parse_arguments():
 
     return parser.parse_args()
 
+
 class Solution:
     def __init__(self, responses, teams=None):
         self.responses = responses
@@ -58,7 +59,6 @@ class Solution:
                     ret += 1
         return ret
 
-
     def heuristic(self):
         return self.total_rating() - 100 * self.antiprefs_violated()
 
@@ -77,10 +77,12 @@ class Solution:
         for i, student in enumerate(ppl_list):
             teams[student] = SCOPE_TEAMS[i // 5]
         return teams
-    
+
+
 def boltzmann(delta, T):
     k = 20
     return np.exp(delta / (k * T))
+
 
 def anneal(curr_solution, T0, alpha, thresh):
     T = T0
@@ -105,6 +107,7 @@ def anneal(curr_solution, T0, alpha, thresh):
 def anneal_with_visual(curr_solution, T0, alpha, thresh):
     T = T0
 
+    best_solution = curr_solution
     best_heuristic = 0
 
     heuristics_curr = []
@@ -117,11 +120,31 @@ def anneal_with_visual(curr_solution, T0, alpha, thresh):
         if delta > 0 or np.random.rand() < boltzmann(delta, T):
             curr_solution.swap_two(s1, s2)
             if ch > best_heuristic:
+                best_solution = curr_solution
                 best_heuristic = ch
             heuristics_curr.append(ch)
             heuristics_best.append(best_heuristic)
         
         T *= alpha
+
+    teams = {}
+
+    for team in SCOPE_TEAMS:
+        teams[team] = []
+
+    for student, team in best_solution.teams.items():
+        teams[team].append(student)
+
+    with open("best_solution.csv", "w") as f:
+        f.write(str(best_heuristic))
+        f.write(f"\nTotal Rating: {best_solution.total_rating()}")
+        f.write(f"\nAntiprefs Violated: {best_solution.antiprefs_violated()}\n")
+
+    with open("best_solution.csv", "a") as f:
+        for team, students in teams.items():
+            f.write(f"\n{team}: {', '.join(students)}")
+
+    print("Best Solution Written to best_solution.csv")
 
     plt.figure(1)
     plt.plot(range(len(heuristics_curr)), np.array(heuristics_curr))
@@ -139,10 +162,7 @@ def anneal_with_visual(curr_solution, T0, alpha, thresh):
     plt.show()
 
 
-def main():
-    # CODE TO RUN ANNEALING SWEEP
-    T0 = 1
-    THRESHOLD = 0.001
+def sweep_alpha(T0, alpha, thresh):
     args = parse_arguments()
 
     responses = pd.read_json('responses.json')
@@ -152,7 +172,7 @@ def main():
             random.seed(args.seed)
             np.random.seed(args.seed)
         solution = Solution(responses)
-        _best_solution, best_heuristic = anneal(solution, T0, args.alpha, THRESHOLD)
+        _best_solution, best_heuristic = anneal(solution, T0, args.alpha, thresh)
         print(best_heuristic)
     elif args.mode == "sweep":
         # parameter sweep alpha and plot results
@@ -169,7 +189,7 @@ def main():
                     random.seed(args.seed)
                     np.random.seed(args.seed)
                 solution = Solution(responses)
-                _best_solution, best_heuristic = anneal(solution, T0, alpha, THRESHOLD)
+                _best_solution, best_heuristic = anneal(solution, T0, alpha, thresh)
                 all_results[alpha].append(best_heuristic)
                 print(f"Alpha: {alpha}, Heuristic: {best_heuristic}")
 
@@ -185,11 +205,20 @@ def main():
         plt.title("Alpha Sweep")
         plt.show()
 
+
+def main():
+    T0 = 1
+    THRESHOLD = 0.001
+    responses = pd.read_json('responses.json')
+
+    # CODE FOR ANNEALING
+    # anneal(Solution(responses), T0, 0.99, THRESHOLD)
+
     # CODE FOR ANNEALING WITH VISUAL
-    # T0 = 1
-    # THRESHOLD = 0.001
-    # responses = pd.read_json('responses.json')
-    # anneal_with_visual(Solution(responses), T0, 0.99, THRESHOLD)
+    anneal_with_visual(Solution(responses), T0, 0.99, THRESHOLD)
+
+    # CODE TO RUN ANNEALING SWEEP
+    # sweep_alpha(T0, 0.99, THRESHOLD)
 
 if __name__ == '__main__':
     main()
