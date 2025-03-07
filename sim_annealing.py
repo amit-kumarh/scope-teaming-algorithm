@@ -141,55 +141,55 @@ def anneal_with_visual(curr_solution, T0, alpha, thresh):
 
 def main():
     # CODE TO RUN ANNEALING SWEEP
-    # T0 = 1
-    # THRESHOLD = 0.001
-    # args = parse_arguments()
-
-    # responses = pd.read_json('responses.json')
-
-    # if args.mode == "single":
-    #     if args.seed is not None:
-    #         random.seed(args.seed)
-    #         np.random.seed(args.seed)
-    #     solution = Solution(responses)
-    #     _best_solution, best_heuristic = anneal(solution, T0, args.alpha, THRESHOLD)
-    #     print(best_heuristic)
-    # elif args.mode == "sweep":
-    #     # parameter sweep alpha and plot results
-    #     alphas = np.arange(args.alpha_start, args.alpha_end+args.alpha_step, args.alpha_step)
-    #     all_results = defaultdict(list)
-
-    #     with open("alpha_sweep.csv", "w") as f:
-    #         f.write("alpha,run,heuristic\n")
-
-    #     for alpha in alphas:
-    #         alpha = round(alpha, 2)
-    #         for _ in range(args.iterations):
-    #             if args.seed is not None:
-    #                 random.seed(args.seed)
-    #                 np.random.seed(args.seed)
-    #             solution = Solution(responses)
-    #             _best_solution, best_heuristic = anneal(solution, T0, alpha, THRESHOLD)
-    #             all_results[alpha].append(best_heuristic)
-    #             print(f"Alpha: {alpha}, Heuristic: {best_heuristic}")
-
-    #         # Write to CSV
-    #         with open("alpha_sweep.csv", "a") as f:
-    #             for run, heuristic in enumerate(all_results[alpha]):
-    #                 f.write(f"{alpha},{run},{heuristic}\n")
-
-    #     # Plot average best for funsies
-    #     plt.plot(alphas, [np.mean(all_results[round(alpha, 2)]) for alpha in alphas])
-    #     plt.xlabel("Alpha")
-    #     plt.ylabel("Average Best Heuristic")
-    #     plt.title("Alpha Sweep")
-    #     plt.show()
-
-    # CODE FOR ANNEALING WITH VISUAL
     T0 = 1
     THRESHOLD = 0.001
+    args = parse_arguments()
+
     responses = pd.read_json('responses.json')
-    anneal_with_visual(Solution(responses), T0, 0.99, THRESHOLD)
+
+    if args.mode == "single":
+        if args.seed is not None:
+            random.seed(args.seed)
+            np.random.seed(args.seed)
+        solution = Solution(responses)
+        _best_solution, best_heuristic = anneal(solution, T0, args.alpha, THRESHOLD)
+        print(best_heuristic)
+    elif args.mode == "sweep":
+        # parameter sweep alpha and plot results
+        alphas = np.arange(args.alpha_start, args.alpha_end+args.alpha_step, args.alpha_step)
+        all_results = defaultdict(list)
+
+        with open("alpha_sweep.csv", "w") as f:
+            f.write("alpha,run,heuristic\n")
+
+        for alpha in alphas:
+            alpha = round(alpha, 2)
+            for _ in range(args.iterations):
+                if args.seed is not None:
+                    random.seed(args.seed)
+                    np.random.seed(args.seed)
+                solution = Solution(responses)
+                _best_solution, best_heuristic = anneal(solution, T0, alpha, THRESHOLD)
+                all_results[alpha].append(best_heuristic)
+                print(f"Alpha: {alpha}, Heuristic: {best_heuristic}")
+
+            # Write to CSV
+            with open("alpha_sweep.csv", "a") as f:
+                for run, heuristic in enumerate(all_results[alpha]):
+                    f.write(f"{alpha},{run},{heuristic}\n")
+
+        # Plot average best for funsies
+        plt.plot(alphas, [np.mean(all_results[round(alpha, 2)]) for alpha in alphas])
+        plt.xlabel("Alpha")
+        plt.ylabel("Average Best Heuristic")
+        plt.title("Alpha Sweep")
+        plt.show()
+
+    # CODE FOR ANNEALING WITH VISUAL
+    # T0 = 1
+    # THRESHOLD = 0.001
+    # responses = pd.read_json('responses.json')
+    # anneal_with_visual(Solution(responses), T0, 0.99, THRESHOLD)
 
 if __name__ == '__main__':
     main()

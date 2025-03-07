@@ -112,6 +112,14 @@ impossible to find a most optimal solution through brute force, including image
 processing and computer vision, circuit design/VLSI layout, and other kinds of
 resource allocation problems.
 
+Here are the results from our run:
+
+<img src="media/alpha_sweep.png" alt="allocation strength by cooling schedule" width="300"/>
+
+This graph shows the results of sweeping our cooling schedule parameter alpha from 0.8 to 0.99 with 20 iterations per value (beginning with a random seed). As it would stand to reason, higher alphas lead to a better team allocation, but the graph is not linear; we found that most alphas lower than about 0.97 were significantly worse, and even between 0.98 and 0.99 there was a sizable difference. Higher alphas also had more consistent results.
+
+Three separate bands are also visible in our data; this is due to the way the antipreferences are encoded, which is as a 100 point subtraction from the rating. This is so that a violated antipreference is nearly unilaterally worse than a solution without one, but still in the realm of feaibility so if the algorithm finds no other decent solution it might still consider it.
+
 ### Ethical Analysis (~1-2 Paragraphs)
 
 There are ethical dilemmas when using algorithms like this to create student
