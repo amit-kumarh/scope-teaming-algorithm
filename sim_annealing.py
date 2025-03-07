@@ -35,12 +35,18 @@ def parse_arguments():
 
 class Solution:
     def __init__(self, responses, teams=None):
+        '''
+        Initializes a solution object with a given set of responses and teams.
+        If no teams are provided, generates random teams.
+        '''
         self.responses = responses
         self.teams = teams if teams is not None else self.gen_random_teams()
 
     def total_rating(self):
         """
-        Total the project ratings for this solution
+        Total the students' project ratings for the current teams they're assigned to.
+
+        Returns: an int representing the total project rating for the solution.
         """
         ans = 0
         for student, team in self.teams.items():
@@ -49,7 +55,9 @@ class Solution:
 
     def antiprefs_violated(self):
         """
-        Return the number of silver bullet violations in this solution
+        Counts the number of silver bullet violations in this solution.
+
+        Returns: an int representing the number of silver bullet violations.
         """
         ret = 0
         for student, team in self.teams.items():
@@ -60,18 +68,46 @@ class Solution:
         return ret
 
     def heuristic(self):
+        """
+        Heuristic function for the solution.
+
+        Returns: an int representing the heuristic value of the solution.
+        """
         return self.total_rating() - 100 * self.antiprefs_violated()
 
     def swap_two(self, s1, s2):
+        '''
+        Swaps the teams of two specified students.
+        
+        Args:
+            s1 (str): the name of the first student
+            s2 (str): the name of the second student
+        '''
         self.teams[s1], self.teams[s2] = self.teams[s2], self.teams[s1]
     
     def swapped_heuristic(self, s1, s2):
+        '''
+        Checks the heuristic value of the solution if two students swap
+        teams (while still preserving the original teams).
+
+        Args:
+            s1 (str): the name of the first student
+            s2 (str): the name of the second student
+
+        Returns: an int representing the heuristic value of the solution
+            if the teams of two specified students are swapped.
+        '''
         self.swap_two(s1, s2)
         h = self.heuristic()
         self.swap_two(s1, s2)
         return h
 
     def gen_random_teams(self):
+        '''
+        Generates random teams for the students in the response data.
+
+        Returns: a dictionary mapping student names to their assigned team names.
+        '''
         teams = {}
         ppl_list = np.random.permutation(self.responses["Name"])
         for i, student in enumerate(ppl_list):
@@ -80,11 +116,32 @@ class Solution:
 
 
 def boltzmann(delta, T):
+    '''
+    Boltzmann probability function for simulated annealing.
+
+    Args:
+        delta (int): the change in heuristic value
+        T (float): the current temperature
+
+    Returns: a float representing the probability of accepting the new solution
+    '''
     k = 20
     return np.exp(delta / (k * T))
 
 
 def anneal(curr_solution, T0, alpha, thresh):
+    '''
+    Simulated annealing algorithm for teaming.
+
+    Args:
+        curr_solution (Solution): the initial solution
+        T0 (int or float): the initial temperature
+        alpha (float): the cooling rate
+        thresh (float): the stopping threshold
+
+    Returns: a tuple containing the best solution found (Solution)
+        and its heuristic value (int)
+    '''
     T = T0
 
     best_solution = curr_solution
@@ -105,6 +162,20 @@ def anneal(curr_solution, T0, alpha, thresh):
 
 
 def anneal_with_visual(curr_solution, T0, alpha, thresh):
+    '''
+    Simulated annealing algorithm for teaming with visualizations.
+
+    Writes the best solution found to a file `best_solution.txt`, including
+    the heuristic value, total rating, antiprefs violated, and teams.
+
+    Plots the current heuristic and best heuristic over annealing iterations.
+
+    Args:
+        curr_solution (Solution): the initial solution
+        T0 (int or float): the initial temperature
+        alpha (float): the cooling rate
+        thresh (float): the stopping threshold
+    '''
     T = T0
 
     best_solution = curr_solution
@@ -136,7 +207,7 @@ def anneal_with_visual(curr_solution, T0, alpha, thresh):
         teams[team].append(student)
 
     with open("best_solution.txt", "w") as f:
-        f.write(str(best_heuristic))
+        f.write(f"\Heuristic: {str(best_heuristic)}")
         f.write(f"\nTotal Rating: {best_solution.total_rating()}")
         f.write(f"\nAntiprefs Violated: {best_solution.antiprefs_violated()}\n")
 
@@ -163,6 +234,17 @@ def anneal_with_visual(curr_solution, T0, alpha, thresh):
 
 
 def sweep_alpha(T0, alpha, thresh):
+    '''
+    Sweeps the alpha parameter for the simulated annealing algorithm.
+
+    Writes the results of the sweep to a CSV file `alpha_sweep.csv`, and
+    plots the average heuristic for each alpha tested.
+
+    Args:
+        T0 (int or float): the initial temperature
+        alpha (float): the cooling rate
+        thresh (float): the stopping threshold
+    '''
     args = parse_arguments()
 
     responses = pd.read_json('responses.json')

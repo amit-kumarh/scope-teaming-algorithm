@@ -6,6 +6,9 @@ RESPONSES = 65
 NAMES = [choice(FIRST) + " " + choice(LAST) for  _ in range(RESPONSES)]
 
 def new_response(name):
+    '''
+    Generate a new survey response for a person with the given name
+    '''
     row = []
     row.append(name)
 
@@ -22,8 +25,6 @@ def new_response(name):
         antiprefs.append(to_add)
 
     row.append(tuple(antiprefs))
-
-
 
     return row
 

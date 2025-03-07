@@ -4,7 +4,11 @@ from matplotlib import pyplot as plt
 
 def heuristic_vs_alpha(alpha, heuristic):
     """
-    Scatter plot of the heuristic against the alpha parameter
+    Scatter plot of heuristics against their corresponding alpha parameters
+
+    Args:
+        alpha (np.array): Array of alpha values
+        heuristic (np.array): Array of heuristic values
     """
     jitter_strength = 0.002
     alpha_jittered = alpha + np.random.normal(0, jitter_strength, size=alpha.shape)
@@ -18,7 +22,12 @@ def heuristic_vs_alpha(alpha, heuristic):
 
 def heuristic_vs_run(alpha, runs, heuristic):
     """
-    Line plot of the heuristic against the alpha parameter for each run
+    Line plot of heuristics against their corresponding alpha parameters, grouped by run
+
+    Args:
+        alpha (np.array): Array of alpha values
+        runs (np.array): Array of run indices
+        heuristic (np.array): Array of heuristic values
     """
     plt.figure()
     for run in np.unique(runs):
