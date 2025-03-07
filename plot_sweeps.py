@@ -8,7 +8,6 @@ def heuristic_vs_alpha(alpha, heuristic):
     """
     jitter_strength = 0.002
     alpha_jittered = alpha + np.random.normal(0, jitter_strength, size=alpha.shape)
-    heuristic_jittered = heuristic + np.random.normal(0, jitter_strength, size=heuristic.shape)
 
     plt.scatter(alpha_jittered, heuristic, alpha=0.5, s=20)
     plt.title('Allocation Strength by Cooling Schedule')
