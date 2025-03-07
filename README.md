@@ -165,6 +165,8 @@ because there are factors that the algorithm simply cannot fully consider,
 adding human oversight and intervention is critical – an algorithm-assisted, but
 ultimately human, process as opposed to an entirely machine-driven one.
 
+The real SCOPE algorithm /teaming process employs some of this - in particular, there is human input at various stages, and the algorithm produces several different allocations that the teaching team can manually adjust to arrive at the final allocation.
+
 ## Libraries Used
 
 - numpy
@@ -176,6 +178,19 @@ ultimately human, process as opposed to an entirely machine-driven one.
 
 ## Resources Used
 
-- Lecture Slides
-- [SCOPE Teaming Algorithm](https://github.com/AllenDowney/TeamAllocation)
-- [Geeks For Geeks](https://www.geeksforgeeks.org/simulated-annealing/)
+Lecture Slides
+
+AllenDowney, “GitHub - AllenDowney/TeamAllocation: Code for making team allocations under constraints.,” GitHub, 2018. https://github.com/AllenDowney/TeamAllocation (accessed Mar. 07, 2025).
+
+
+“Simulated Annealing - GeeksforGeeks,” GeeksforGeeks, Aug. 11, 2017. https://www.geeksforgeeks.org/simulated-annealing/
+
+A. Pal, “Simulated Annealing : Methods and Real-World Applications – OMSCS 7641: Machine Learning,” Gatech.edu, 2024. https://sites.gatech.edu/omscs7641/2024/02/19/simulated-annealing-methods-and-real-world-applications/
+
+D. Delahaye, S. Chaimatanan, and M. Mongeau, “Simulated Annealing: From Basics to Applications,” Handbook of Metaheuristics, pp. 1–35, Sep. 2018, doi: https://doi.org/10.1007/978-3-319-91086-4_1.
+
+‌
+
+‌
+
+‌
