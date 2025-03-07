@@ -135,16 +135,16 @@ def anneal_with_visual(curr_solution, T0, alpha, thresh):
     for student, team in best_solution.teams.items():
         teams[team].append(student)
 
-    with open("best_solution.csv", "w") as f:
+    with open("best_solution.txt", "w") as f:
         f.write(str(best_heuristic))
         f.write(f"\nTotal Rating: {best_solution.total_rating()}")
         f.write(f"\nAntiprefs Violated: {best_solution.antiprefs_violated()}\n")
 
-    with open("best_solution.csv", "a") as f:
+    with open("best_solution.txt", "a") as f:
         for team, students in teams.items():
             f.write(f"\n{team}: {', '.join(students)}")
 
-    print("Best Solution Written to best_solution.csv")
+    print("Best Solution Written to best_solution.txt")
 
     plt.figure(1)
     plt.plot(range(len(heuristics_curr)), np.array(heuristics_curr))

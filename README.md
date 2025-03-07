@@ -2,6 +2,20 @@
 
 Team Members: Amit Kumar-Hermosillo, Lily Jiang
 
+## How to Run This Project
+
+If you have this repo installed locally on your computer, follow these steps to
+run the project:
+
+1. Ensure you have the right dependencies installed. All dependencies are listed
+   in the "Libraries Used" section ([jump to section](#libraries-used)). You can
+   install them all at once by running `pip install -r requirements.txt`.
+2. To run the simulated annealing algorithm one time, run
+   `python sim_annealing.py`. This will write the final solution to a file
+   called `best_solution.txt`, and display visuals of the annealing process.
+3. For other capabilities like viewing a sweep of alpha values, uncomment the
+   appropriate lines in the `main` function of `sim_annealing.py`.
+
 ## Technical Write Up
 
 ### Background of Algorithm (~1-2 paragraphs)
@@ -116,9 +130,18 @@ Here are the results from our run:
 
 <img src="media/alpha_sweep.png" alt="allocation strength by cooling schedule" width="300"/>
 
-This graph shows the results of sweeping our cooling schedule parameter alpha from 0.8 to 0.99 with 20 iterations per value (beginning with a random seed). As it would stand to reason, higher alphas lead to a better team allocation, but the graph is not linear; we found that most alphas lower than about 0.97 were significantly worse, and even between 0.98 and 0.99 there was a sizable difference. Higher alphas also had more consistent results.
+This graph shows the results of sweeping our cooling schedule parameter alpha
+from 0.8 to 0.99 with 20 iterations per value (beginning with a random seed). As
+it would stand to reason, higher alphas lead to a better team allocation, but
+the graph is not linear; we found that most alphas lower than about 0.97 were
+significantly worse, and even between 0.98 and 0.99 there was a sizable
+difference. Higher alphas also had more consistent results.
 
-Three separate bands are also visible in our data; this is due to the way the antipreferences are encoded, which is as a 100 point subtraction from the rating. This is so that a violated antipreference is nearly unilaterally worse than a solution without one, but still in the realm of feaibility so if the algorithm finds no other decent solution it might still consider it.
+Three separate bands are also visible in our data; this is due to the way the
+antipreferences are encoded, which is as a 100 point subtraction from the
+rating. This is so that a violated antipreference is nearly unilaterally worse
+than a solution without one, but still in the realm of feaibility so if the
+algorithm finds no other decent solution it might still consider it.
 
 ### Ethical Analysis (~1-2 Paragraphs)
 
