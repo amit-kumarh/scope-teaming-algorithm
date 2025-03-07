@@ -147,6 +147,7 @@ def anneal(curr_solution, T0, alpha, thresh):
     best_solution = curr_solution
     best_heuristic = 0
 
+    # Simulated annealing loop
     while T > thresh:
         s1 = random.choice(list(curr_solution.teams.keys()))
         s2 = random.choice(list(curr_solution.teams.keys()))
@@ -157,7 +158,7 @@ def anneal(curr_solution, T0, alpha, thresh):
                 best_solution = curr_solution
                 best_heuristic = ch
         
-        T *= alpha
+        T *= alpha  # cool down temperature
     return best_solution, best_heuristic
 
 
@@ -181,9 +182,12 @@ def anneal_with_visual(curr_solution, T0, alpha, thresh):
     best_solution = curr_solution
     best_heuristic = 0
 
+    # keep track of the current heuristic and the overall best heuristic
+    # for plotting purposes
     heuristics_curr = []
     heuristics_best = []
 
+    # Simulated annealing loop
     while T > thresh:
         s1 = random.choice(list(curr_solution.teams.keys()))
         s2 = random.choice(list(curr_solution.teams.keys()))
@@ -196,16 +200,17 @@ def anneal_with_visual(curr_solution, T0, alpha, thresh):
             heuristics_curr.append(ch)
             heuristics_best.append(best_heuristic)
         
-        T *= alpha
+        T *= alpha  # cool down temperature
 
     teams = {}
 
+    # Create mappings of teams to students
     for team in SCOPE_TEAMS:
         teams[team] = []
-
     for student, team in best_solution.teams.items():
         teams[team].append(student)
 
+    # Write best solution to file
     with open("best_solution.txt", "w") as f:
         f.write(f"\Heuristic: {str(best_heuristic)}")
         f.write(f"\nTotal Rating: {best_solution.total_rating()}")
@@ -217,6 +222,7 @@ def anneal_with_visual(curr_solution, T0, alpha, thresh):
 
     print("Best Solution Written to best_solution.txt")
 
+    # Plot heuristics over iterations
     plt.figure(1)
     plt.plot(range(len(heuristics_curr)), np.array(heuristics_curr))
     plt.xlabel("Iteration Number")
@@ -249,6 +255,7 @@ def sweep_alpha(T0, alpha, thresh):
 
     responses = pd.read_json('responses.json')
 
+    # run one single sweep, with an optional seed for reproducibility
     if args.mode == "single":
         if args.seed is not None:
             random.seed(args.seed)
@@ -257,7 +264,7 @@ def sweep_alpha(T0, alpha, thresh):
         _best_solution, best_heuristic = anneal(solution, T0, args.alpha, thresh)
         print(best_heuristic)
     elif args.mode == "sweep":
-        # parameter sweep alpha and plot results
+        # parameter sweep alpha over specified range and plot results
         alphas = np.arange(args.alpha_start, args.alpha_end+args.alpha_step, args.alpha_step)
         all_results = defaultdict(list)
 
