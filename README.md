@@ -18,7 +18,7 @@ run the project:
 
 ## Technical Write Up
 
-### Background of Algorithm (~1-2 paragraphs)
+### Background of Algorithm
 
 This implementation relies on Simulated Annealing, which is a metaheuristic
 inspired by annealing in metallurgy (a process that involves heating a metal to
@@ -81,7 +81,7 @@ calculated at each jump and the overall best heuristic found for one run:
 Note the large jumps at the beginning, and the smaller jumps as the algorithm
 progresses.
 
-### Solving a Problem (~1-2 paragraphs)
+### Solving a Problem
 
 We have chosen to adapt the simulated annealing algorithm to the problem of
 SCOPE team allocation at Olin - in other words, allocating a set of students
@@ -143,7 +143,7 @@ rating. This is so that a violated antipreference is nearly unilaterally worse
 than a solution without one, but still in the realm of feaibility so if the
 algorithm finds no other decent solution it might still consider it.
 
-### Ethical Analysis (~1-2 Paragraphs)
+### Ethical Analysis
 
 There are ethical dilemmas when using algorithms like this to create student
 SCOPE teams. For one, there are definite potential sources of bias, whether in
